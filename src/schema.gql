@@ -1,0 +1,76 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateListInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateTodoInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input CreateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type List {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Mutation {
+  createList(createListInput: CreateListInput!): List!
+  createTodo(createTodoInput: CreateTodoInput!): Todo!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeList(id: Int!): List!
+  removeTodo(id: Int!): Todo!
+  removeUser(id: Int!): User!
+  updateList(updateListInput: UpdateListInput!): List!
+  updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  list(id: Int!): List!
+  lists: [List!]!
+  todo(id: Int!): Todo!
+  todos: [Todo!]!
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+type Todo {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateListInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateTodoInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input UpdateUserInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+type User {
+  """Example field (placeholder)"""
+  exampleField: Int!
+
+  """The ID of the user"""
+  id: String!
+  todos: [Todo!]!
+}
