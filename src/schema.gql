@@ -8,8 +8,11 @@ input CreateListInput {
 }
 
 input CreateTodoInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Description of the Todo"""
+  description: String!
+
+  """Title of the Todo"""
+  title: String!
 }
 
 input CreateUserInput {
@@ -26,6 +29,7 @@ type Mutation {
   createList(createListInput: CreateListInput!): List!
   createTodo(createTodoInput: CreateTodoInput!): Todo!
   createUser(createUserInput: CreateUserInput!): User!
+  markTodoAsDone(id: ID!): Todo!
   removeList(id: Int!): List!
   removeTodo(id: Int!): Todo!
   removeUser(id: Int!): User!
@@ -44,8 +48,22 @@ type Query {
 }
 
 type Todo {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """Description of the Todo"""
+  description: String!
+
+  """Unique ID of the Todo."""
+  id: String!
+
+  """The status if the Todo"""
+  status: TodoStatus!
+
+  """Title of the Todo"""
+  title: String!
+}
+
+enum TodoStatus {
+  DONE
+  TODO
 }
 
 input UpdateListInput {
@@ -55,9 +73,12 @@ input UpdateListInput {
 }
 
 input UpdateTodoInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  """Description of the Todo"""
+  description: String!
+  id: ID!
+
+  """Title of the Todo"""
+  title: String!
 }
 
 input UpdateUserInput {

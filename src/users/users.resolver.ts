@@ -11,8 +11,8 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { Todo } from 'src/todos/entities/todo.entity';
-import { TodosService } from 'src/todos/todos.service';
+import { Todo } from '../todos/entities/todo.entity';
+import { TodosService } from '../todos/todos.service';
 
 @Resolver(() => User)
 export class UsersResolver {
