@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { UpdateTodoInput } from './dto/update-todo.input';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId, Types } from 'mongoose';
-import { Todo, TodoStatus } from './todo.schema';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { Todo, TodoStatus } from './entities/todo.entity';
 
 @Injectable()
 export class TodosService {

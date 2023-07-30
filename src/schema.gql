@@ -54,7 +54,7 @@ type Todo {
   description: String!
 
   """Unique ID of the Todo."""
-  id: String!
+  id: ID!
 
   """The status if the Todo"""
   status: TodoStatus!
@@ -96,6 +96,8 @@ input UpdateUserInput {
 }
 
 type User {
+  """The user's name"""
+  id: ID!
   todos: [Todo!]!
 
   """The user's name"""

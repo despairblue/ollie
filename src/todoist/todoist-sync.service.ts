@@ -6,7 +6,7 @@ import { TodosService } from 'src/todos/todos.service';
 import { TodoistApiService } from './todoist-api.service';
 
 import type { ConfigurationType } from 'src/configuration/configuration';
-import { TodoStatus } from 'src/todos/todo.schema';
+import { TodoStatus } from 'src/todos/entities/todo.entity';
 
 @Injectable()
 export class TodoistSyncService {
