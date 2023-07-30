@@ -1,30 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
+  constructor(
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+  ) {}
+
   findAllUsersThatNeedToBySynced(seconds: number): User[] {
     throw new Error('Method not implemented.');
   }
   create(createUserInput: CreateUserInput) {
-    return 'This action adds a new user';
+    this.userModel.create(createUserInput);
   }
 
-  findAll(): User[] {
-    return [{ exampleField: 1, id: '1', lastSyncAt: new Date() }];
+  findAll() {
+    throw new Error('Method not implemented.');
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOneById(id: string) {
+    return this.userModel.findOne({ _id: id }, undefined, { lean: true });
   }
 
-  update(id: number, updateUserInput: UpdateUserInput) {
-    return `This action updates a #${id} user`;
+  findOneByUsername(username: string) {
+    return this.userModel.findOne({ username }, undefined, { lean: true });
+  }
+
+  update(username: string, updateUserInput: UpdateUserInput) {
+    throw new Error('Method not implemented.');
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    throw new Error('Method not implemented.');
   }
 }

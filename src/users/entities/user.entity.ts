@@ -1,12 +1,26 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field } from '@nestjs/graphql';
+import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
+import { HydratedDocument, ObjectId, Types } from 'mongoose';
+
+export type UserDocument = HydratedDocument<User>;
 
 @ObjectType()
+@Schema()
 export class User {
-  @Field(() => String, { description: 'The ID of the user' })
-  id: string;
+  _id: ObjectId;
 
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Prop({ unique: true })
+  @Field(() => String, { description: "The user's name" })
+  username: string;
 
-  lastSyncAt: Date;
+  @Prop()
+  password: string;
+
+  @Prop({ required: false })
+  todoistApiKey?: string;
+
+  @Prop()
+  lastSyncedAt: Date;
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);
