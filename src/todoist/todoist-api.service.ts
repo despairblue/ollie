@@ -1,6 +1,5 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { addFieldMetadata } from '@nestjs/graphql';
 import { z } from 'zod';
 
 const SyncResponseSchema = z.object({
@@ -25,7 +24,7 @@ const AddTaskResponseSchema = z.object({
 export class TodoistApiService {
   constructor(private readonly httpService: HttpService) {}
 
-  async sync(authToken: string, syncToken: string = '*') {
+  async sync(authToken: string, syncToken = '*') {
     // Using axiosRef here because I don't think we need an Observable just for this.
     // TODO: extract into own service
     const response = await this.httpService.axiosRef.post(
@@ -33,8 +32,6 @@ export class TodoistApiService {
       { sync_token: syncToken, resource_types: ['items'] },
       { headers: { Authorization: `Bearer ${authToken}` } },
     );
-
-    console.log(response.data);
 
     // always parse incoming data
     return SyncResponseSchema.parse(response.data);
@@ -70,7 +67,6 @@ export class TodoistApiService {
       projectId?: string;
     },
   ) {
-    console.log(input);
     const response = await this.httpService.axiosRef.post(
       `https://api.todoist.com/rest/v2/tasks/${taskId}`,
       {
