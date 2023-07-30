@@ -3,7 +3,6 @@ import {
   Query,
   Mutation,
   Args,
-  Int,
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
@@ -13,6 +12,9 @@ import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Todo } from '../todos/entities/todo.entity';
 import { TodosService } from '../todos/todos.service';
+import { UseGuards } from '@nestjs/common';
+import { GraphqlJWTAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
+import { CurrentUser } from 'src/auth/current-user.decorator';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -26,30 +28,19 @@ export class UsersResolver {
     return this.usersService.create(createUserInput);
   }
 
-  @Query(() => [User], { name: 'users' })
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  // Find out why the return type of this function can't be inferred correctly
-  // based on the entity given to the decorator.
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findOne(id);
+  @UseGuards(GraphqlJWTAuthGuard)
+  @Query(() => User, { name: 'me' })
+  me(@CurrentUser() user: User) {
+    return user;
   }
 
   @Mutation(() => User)
   updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.id, updateUserInput);
-  }
-
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.remove(id);
+    return this.usersService.update(updateUserInput.username, updateUserInput);
   }
 
   @ResolveField('todos', () => [Todo])
   async getTodos(@Parent() user: User) {
-    return this.todosService.findAll({ userId: user.id });
+    return this.todosService.findAll({ userId: user._id });
   }
 }

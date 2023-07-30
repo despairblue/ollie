@@ -16,8 +16,11 @@ input CreateTodoInput {
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  """THe user's password"""
+  password: String!
+
+  """The user's name"""
+  username: String!
 }
 
 type List {
@@ -29,10 +32,10 @@ type Mutation {
   createList(createListInput: CreateListInput!): List!
   createTodo(createTodoInput: CreateTodoInput!): Todo!
   createUser(createUserInput: CreateUserInput!): User!
+  login(password: String!, username: String!): String!
   markTodoAsDone(id: ID!): Todo!
   removeList(id: Int!): List!
   removeTodo(id: Int!): Todo!
-  removeUser(id: Int!): User!
   updateList(updateListInput: UpdateListInput!): List!
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
   updateUser(updateUserInput: UpdateUserInput!): User!
@@ -41,10 +44,9 @@ type Mutation {
 type Query {
   list(id: Int!): List!
   lists: [List!]!
+  me: User!
   todo(id: String!): Todo!
   todos: [Todo!]!
-  user(id: Int!): User!
-  users: [User!]!
 }
 
 type Todo {
@@ -85,16 +87,17 @@ input UpdateTodoInput {
 }
 
 input UpdateUserInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  name: String!
+
+  """THe user's password"""
+  password: String
+  todoistApiKey: String!
+  username: String!
 }
 
 type User {
-  """Example field (placeholder)"""
-  exampleField: Int!
-
-  """The ID of the user"""
-  id: String!
   todos: [Todo!]!
+
+  """The user's name"""
+  username: String!
 }
