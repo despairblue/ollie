@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { UpdateTodoInput } from './dto/update-todo.input';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 import { Todo, TodoStatus } from './todo.schema';
 import { CreateTodoDto } from './dto/create-todo.dto';
 
@@ -23,7 +23,7 @@ export class TodosService {
     });
   }
 
-  async findAll(options: { userId: string }): Promise<Todo[]> {
+  async findAll(options: { userId: string | ObjectId }): Promise<Todo[]> {
     return this.todoModel.find();
   }
 
