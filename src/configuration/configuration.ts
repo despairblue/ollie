@@ -5,7 +5,7 @@ const schema = z.object({
   MONGODB_URI: z.string(),
 });
 
-export type Type = z.output<typeof schema>;
+export type ConfigurationType = z.output<typeof schema>;
 export class Configuration {
   static validate(config: unknown) {
     const result = schema.safeParse(config);

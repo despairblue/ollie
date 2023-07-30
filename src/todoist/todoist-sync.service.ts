@@ -5,7 +5,7 @@ import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 import { TodosService } from 'src/todos/todos.service';
 import { TodoistApiService } from './todoist-api.service';
 
-import type { Type as ConfigurationType } from 'src/configuration/configuration';
+import type { ConfigurationType } from 'src/configuration/configuration';
 import { TodoStatus } from 'src/todos/todo.schema';
 
 @Injectable()
