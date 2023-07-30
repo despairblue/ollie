@@ -10,11 +10,11 @@ export class User {
   @Field(() => ID, { name: 'id', description: "The user's name" })
   _id: ObjectId;
 
-  @Prop({ unique: true })
   @Field(() => String, { description: "The user's name" })
+  @Prop({ unique: true })
   username: string;
 
-  @Prop()
+  @Prop({ required: true })
   password: string;
 
   @Prop({ required: false })
@@ -22,6 +22,9 @@ export class User {
 
   @Prop()
   lastSyncedAt: Date;
+
+  @Prop()
+  syncToken?: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

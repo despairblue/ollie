@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -34,7 +34,7 @@ export class UsersService {
     return this.userModel.findOne({ username }, undefined, { lean: true });
   }
 
-  update(id: string, updateUserInput: UpdateUserInput) {
+  update(id: string | ObjectId, updateUserInput: UpdateUserInput) {
     return this.userModel.findOneAndUpdate(
       { _id: id },
       { $set: updateUserInput },

@@ -4,4 +4,6 @@ import { InputType, Field } from '@nestjs/graphql';
 export class UpdateUserInput {
   @Field(() => String)
   todoistApiKey?: string;
+
+  syncToken?: string;
 }

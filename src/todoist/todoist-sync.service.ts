@@ -9,7 +9,6 @@ import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class TodoistSyncService {
-  private syncToken = '*';
   private lastSyncedAt = new Date();
 
   constructor(
@@ -33,10 +32,8 @@ export class TodoistSyncService {
 
       const result = await this.todoistApiService.sync(
         user.todoistApiKey,
-        this.syncToken,
+        user.syncToken ?? '*',
       );
-
-      this.syncToken = result.sync_token;
 
       // TODO: create bulk sync function
       for (const item of result.items) {
@@ -60,6 +57,12 @@ export class TodoistSyncService {
           });
         }
       }
+
+      // Only store the sync token after all updates have persisted. To prevent
+      // lost syncs.
+      await this.usersService.update(user._id, {
+        syncToken: result.sync_token,
+      });
     }
   }
 
