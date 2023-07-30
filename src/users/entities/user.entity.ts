@@ -7,4 +7,6 @@ export class User {
 
   @Field(() => Int, { description: 'Example field (placeholder)' })
   exampleField: number;
+
+  lastSyncAt: Date;
 }

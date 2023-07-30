@@ -2,6 +2,13 @@
 
 ToDo API.
 
+### ToDos
+
+- [ ] get the description of todoist
+- [ ] sync creted todos back to todoist
+- [ ] add a sync api so that the FE can efficiently sync and provide instant feedback without request roundtrips
+    - see https://www.youtube.com/watch?v=WxK11RsLqp4 and https://www.youtube.com/watch?v=Wo2m3jaJixU for an in depth walkthrough of a well defined synchronization engine
+
 ### Considerations
 
 **Why Nest.js?**

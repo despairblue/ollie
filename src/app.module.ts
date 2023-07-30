@@ -9,6 +9,11 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TodosModule } from './todos/todos.module';
 import { ListsModule } from './lists/lists.module';
+import { TodoistModule } from './todoist/todoist.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Configuration } from './configuration/configuration';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -24,6 +29,22 @@ import { ListsModule } from './lists/lists.module';
     UsersModule,
     TodosModule,
     ListsModule,
+    TodoistModule,
+    ScheduleModule.forRoot(),
+    ConfigModule.forRoot({
+      // The default is `joi`, but I feel joi is a bit dated nowadays and zod
+      // provides a much better user experience and integration with typescript
+      // So here I'll deviate from the defaults of NestJS
+      // TODO: extract into own file
+      validate: Configuration.validate,
+    }),
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        uri: configService.get('MONGODB_URI', { infer: true }),
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -7,4 +7,6 @@ export class CreateTodoInput {
 
   @Field(() => String, { description: 'Description of the Todo' })
   description: string;
+
+  todoistID?: string;
 }

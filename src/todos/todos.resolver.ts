@@ -3,6 +3,7 @@ import { TodosService } from './todos.service';
 import { Todo } from './entities/todo.entity';
 import { CreateTodoInput } from './dto/create-todo.input';
 import { UpdateTodoInput } from './dto/update-todo.input';
+import { TodoStatus } from './todo.schema';
 
 @Resolver(() => Todo)
 export class TodosResolver {
@@ -10,7 +11,10 @@ export class TodosResolver {
 
   @Mutation(() => Todo)
   createTodo(@Args('createTodoInput') createTodoInput: CreateTodoInput) {
-    return this.todosService.create(createTodoInput);
+    return this.todosService.create({
+      ...createTodoInput,
+      status: TodoStatus.TODO,
+    });
   }
 
   @Query(() => [Todo], { name: 'todos' })
@@ -20,7 +24,7 @@ export class TodosResolver {
   }
 
   @Query(() => Todo, { name: 'todo' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => String }) id: string) {
     return this.todosService.findOne(id);
   }
 

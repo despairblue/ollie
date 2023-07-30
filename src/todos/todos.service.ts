@@ -1,56 +1,58 @@
 import { Injectable } from '@nestjs/common';
 
-import { CreateTodoInput } from './dto/create-todo.input';
 import { UpdateTodoInput } from './dto/update-todo.input';
-import { Todo, TodoStatus } from './entities/todo.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, Types } from 'mongoose';
+import { Todo, TodoStatus } from './todo.schema';
+import { CreateTodoDto } from './dto/create-todo.dto';
 
 @Injectable()
 export class TodosService {
-  private todos: Todo[] = [];
+  // private todos: Todo[] = [];
 
-  create(createTodoInput: CreateTodoInput): Todo {
-    const todo = {
-      id: String(this.todos.length + 1),
-      status: TodoStatus.TODO,
+  constructor(
+    @InjectModel(Todo.name) private readonly todoModel: Model<Todo>,
+  ) {}
+
+  findAllUnsyncedTodos(lastSyncedAt: Date) {
+    return this.todoModel.find({ updatedAt: { $gt: lastSyncedAt } });
+  }
+
+  create(createTodoInput: CreateTodoDto): Promise<Todo> {
+    return this.todoModel.create({
       ...createTodoInput,
-    };
-
-    this.todos.push(todo);
-
-    return todo;
+      updatedAt: new Date(),
+    });
   }
 
-  findAll(options: { userId: string }): Todo[] {
-    return this.todos;
+  async findAll(options: { userId: string }): Promise<Todo[]> {
+    return this.todoModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} todo`;
+  findOne(id: string) {
+    return this.todoModel.findOne({ _id: id });
   }
 
-  update(id: string, updateTodoInput: UpdateTodoInput) {
-    const todo = this.todos.find((todo) => todo.id === id);
+  findOneByTodoistID(id: string) {
+    return this.todoModel.findOne({ todoistID: id });
+  }
 
-    if (todo == null) {
-      return null;
-    }
+  // findOneByExternalId(id: string) {
+  //   return `This action returns a #${id} todo`;
+  // }
 
-    todo.description = updateTodoInput.description;
-    todo.title = updateTodoInput.title;
-
-    return todo;
+  update(id: string | Types.ObjectId, updateTodoInput: UpdateTodoInput) {
+    return this.todoModel.updateOne({ _id: id }, updateTodoInput, {
+      new: true,
+    });
   }
 
   markTodoAsDone(id: string) {
-    const todo = this.todos.find((todo) => todo.id === id);
-
-    if (todo == null) {
-      return null;
-    }
-
-    todo.status = TodoStatus.DONE;
-
-    return todo;
+    return this.todoModel.updateOne(
+      { _id: id },
+      { status: TodoStatus.DONE },
+      { new: true },
+    );
   }
 
   remove(id: number) {

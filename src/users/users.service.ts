@@ -5,14 +5,15 @@ import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
+  findAllUsersThatNeedToBySynced(seconds: number): User[] {
+    throw new Error('Method not implemented.');
+  }
   create(createUserInput: CreateUserInput) {
     return 'This action adds a new user';
   }
 
   findAll(): User[] {
-    // return `This action returns all users`;
-
-    return [{ exampleField: 1, id: '1' }];
+    return [{ exampleField: 1, id: '1', lastSyncAt: new Date() }];
   }
 
   findOne(id: number) {

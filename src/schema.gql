@@ -41,7 +41,7 @@ type Mutation {
 type Query {
   list(id: Int!): List!
   lists: [List!]!
-  todo(id: Int!): Todo!
+  todo(id: String!): Todo!
   todos: [Todo!]!
   user(id: Int!): User!
   users: [User!]!
@@ -59,6 +59,9 @@ type Todo {
 
   """Title of the Todo"""
   title: String!
+
+  """The ID of the item in Todoist"""
+  todoistID: String
 }
 
 enum TodoStatus {
