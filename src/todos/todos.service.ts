@@ -17,14 +17,15 @@ export class TodosService {
   }
 
   create(createTodoInput: CreateTodoDto): Promise<Todo> {
+    console.log(createTodoInput);
     return this.todoModel.create({
       ...createTodoInput,
       updatedAt: new Date(),
     });
   }
 
-  async findAll(options: { userId: string | ObjectId }): Promise<Todo[]> {
-    return this.todoModel.find();
+  async findAllByUser(options: { userId: string | ObjectId }): Promise<Todo[]> {
+    return this.todoModel.find({ userId: options.userId });
   }
 
   findOne(id: string) {

@@ -1,5 +1,5 @@
 import { ObjectType, Field, registerEnumType, ID } from '@nestjs/graphql';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument, ObjectId } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type TodoDocument = HydratedDocument<Todo>;
@@ -17,15 +17,15 @@ export class Todo {
   _id: string;
 
   @Field(() => String, { description: 'Title of the Todo' })
-  @Prop()
+  @Prop({ required: true })
   title: string;
 
   @Field(() => String, { description: 'Description of the Todo' })
-  @Prop()
+  @Prop({ required: true })
   description: string;
 
   @Field(() => TodoStatus, { description: 'The status if the Todo' })
-  @Prop({ enum: TodoStatus })
+  @Prop({ enum: TodoStatus, required: true })
   status: TodoStatus;
 
   @Field(() => String, {
@@ -35,8 +35,11 @@ export class Todo {
   @Prop({ required: false })
   todoistID?: string;
 
-  @Prop()
+  @Prop({ required: true })
   updatedAt: Date;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
+  userId: ObjectId;
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);

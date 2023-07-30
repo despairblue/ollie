@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 
 import { TodosService } from 'src/todos/todos.service';
 import { TodoistApiService } from './todoist-api.service';
 
-import type { ConfigurationType } from 'src/configuration/configuration';
 import { TodoStatus } from 'src/todos/entities/todo.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class TodoistSyncService {
@@ -15,8 +14,8 @@ export class TodoistSyncService {
 
   constructor(
     private readonly todosService: TodosService,
-    private readonly configService: ConfigService<ConfigurationType, true>,
     private readonly todoistApiService: TodoistApiService,
+    private readonly usersService: UsersService,
   ) {}
 
   // sync on application startup
@@ -25,29 +24,41 @@ export class TodoistSyncService {
   async syncDataFromTodoist() {
     console.log('sync from todoist');
 
-    const result = await this.todoistApiService.sync(
-      this.configService.get('TODOIST_API_KEY', { infer: true }),
-      this.syncToken,
-    );
+    const users = await this.usersService.findAllWithTodoistAPIKey();
 
-    this.syncToken = result.sync_token;
+    for (const user of users) {
+      if (user.todoistApiKey == null) {
+        continue;
+      }
 
-    // TODO: create bulk sync function
-    for (const item of result.items) {
-      const internalTodo = await this.todosService.findOneByTodoistID(item.id);
-      if (internalTodo) {
-        this.todosService.update(internalTodo._id, {
-          id: internalTodo.id,
-          title: item.content,
-          description: item.description,
-        });
-      } else {
-        this.todosService.create({
-          title: item.content,
-          description: item.description,
-          todoistID: item.id,
-          status: item.checked ? TodoStatus.DONE : TodoStatus.TODO,
-        });
+      const result = await this.todoistApiService.sync(
+        user.todoistApiKey,
+        this.syncToken,
+      );
+
+      this.syncToken = result.sync_token;
+
+      // TODO: create bulk sync function
+      for (const item of result.items) {
+        const internalTodo = await this.todosService.findOneByTodoistID(
+          item.id,
+        );
+        if (internalTodo) {
+          await this.todosService.update(internalTodo._id, {
+            id: internalTodo.id,
+            title: item.content,
+            description: item.description,
+            userId: user._id,
+          });
+        } else {
+          await this.todosService.create({
+            title: item.content,
+            description: item.description,
+            todoistID: item.id,
+            status: item.checked ? TodoStatus.DONE : TodoStatus.TODO,
+            userId: user._id,
+          });
+        }
       }
     }
   }

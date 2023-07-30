@@ -1,14 +1,7 @@
-import { CreateUserInput } from './create-user.input';
-import { InputType, Field, PartialType } from '@nestjs/graphql';
+import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateUserInput extends PartialType(CreateUserInput) {
-  @Field(() => String)
-  username: string;
-
-  @Field(() => String)
-  name?: string;
-
+export class UpdateUserInput {
   @Field(() => String)
   todoistApiKey?: string;
 }

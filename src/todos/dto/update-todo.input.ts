@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongoose';
 import { CreateTodoInput } from './create-todo.input';
 import { InputType, Field, ID, PartialType } from '@nestjs/graphql';
 
@@ -12,4 +13,6 @@ export class UpdateTodoInput extends PartialType(CreateTodoInput) {
 
   @Field(() => String, { description: 'Description of the Todo' })
   description: string;
+
+  userId?: string | ObjectId;
 }

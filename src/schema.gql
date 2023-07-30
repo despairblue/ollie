@@ -38,7 +38,7 @@ type Mutation {
   removeTodo(id: Int!): Todo!
   updateList(updateListInput: UpdateListInput!): List!
   updateTodo(updateTodoInput: UpdateTodoInput!): Todo!
-  updateUser(updateUserInput: UpdateUserInput!): User!
+  updateUser(id: ID!, updateUserInput: UpdateUserInput!): User!
 }
 
 type Query {
@@ -46,7 +46,6 @@ type Query {
   lists: [List!]!
   me: User!
   todo(id: String!): Todo!
-  todos: [Todo!]!
 }
 
 type Todo {
@@ -87,12 +86,7 @@ input UpdateTodoInput {
 }
 
 input UpdateUserInput {
-  name: String!
-
-  """THe user's password"""
-  password: String
   todoistApiKey: String!
-  username: String!
 }
 
 type User {

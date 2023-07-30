@@ -22,6 +22,10 @@ export class UsersService {
     throw new Error('Method not implemented.');
   }
 
+  findAllWithTodoistAPIKey() {
+    return this.userModel.find({ todoistApiKey: { $ne: null } });
+  }
+
   findOneById(id: string) {
     return this.userModel.findOne({ _id: id }, undefined, { lean: true });
   }
@@ -30,8 +34,12 @@ export class UsersService {
     return this.userModel.findOne({ username }, undefined, { lean: true });
   }
 
-  update(username: string, updateUserInput: UpdateUserInput) {
-    throw new Error('Method not implemented.');
+  update(id: string, updateUserInput: UpdateUserInput) {
+    return this.userModel.findOneAndUpdate(
+      { _id: id },
+      { $set: updateUserInput },
+      { returnDocument: 'after', lean: true },
+    );
   }
 
   remove(id: number) {

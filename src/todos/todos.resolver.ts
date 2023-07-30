@@ -3,23 +3,26 @@ import { TodosService } from './todos.service';
 import { Todo, TodoStatus } from './entities/todo.entity';
 import { CreateTodoInput } from './dto/create-todo.input';
 import { UpdateTodoInput } from './dto/update-todo.input';
+import { UseGuards } from '@nestjs/common';
+import { GraphqlJWTAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
+import { CurrentUser } from 'src/auth/current-user.decorator';
+import { User } from 'src/users/entities/user.entity';
 
 @Resolver(() => Todo)
 export class TodosResolver {
   constructor(private readonly todosService: TodosService) {}
 
   @Mutation(() => Todo)
-  createTodo(@Args('createTodoInput') createTodoInput: CreateTodoInput) {
+  @UseGuards(GraphqlJWTAuthGuard)
+  createTodo(
+    @Args('createTodoInput') createTodoInput: CreateTodoInput,
+    @CurrentUser() user: User,
+  ) {
     return this.todosService.create({
       ...createTodoInput,
       status: TodoStatus.TODO,
+      userId: user._id,
     });
-  }
-
-  @Query(() => [Todo], { name: 'todos' })
-  // todo add args
-  findAll() {
-    return this.todosService.findAll({ userId: '1' });
   }
 
   @Query(() => Todo, { name: 'todo' })

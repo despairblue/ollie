@@ -5,6 +5,7 @@ import {
   Args,
   ResolveField,
   Parent,
+  ID,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
@@ -35,12 +36,15 @@ export class UsersResolver {
   }
 
   @Mutation(() => User)
-  updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-    return this.usersService.update(updateUserInput.username, updateUserInput);
+  updateUser(
+    @Args('id', { type: () => ID }) id: string,
+    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+  ) {
+    return this.usersService.update(id, updateUserInput);
   }
 
   @ResolveField('todos', () => [Todo])
   async getTodos(@Parent() user: User) {
-    return this.todosService.findAll({ userId: user._id });
+    return this.todosService.findAllByUser({ userId: user._id });
   }
 }
