@@ -8,8 +8,6 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 
 @Injectable()
 export class TodosService {
-  // private todos: Todo[] = [];
-
   constructor(
     @InjectModel(Todo.name) private readonly todoModel: Model<Todo>,
   ) {}
