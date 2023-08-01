@@ -24,7 +24,7 @@ export class TodosService {
     });
   }
 
-  async findAllByUser(options: { userId: string | ObjectId }): Promise<Todo[]> {
+  findAllByUser(options: { userId: string | ObjectId }): Promise<Todo[]> {
     return this.todoModel.find({ userId: options.userId });
   }
 
@@ -35,10 +35,6 @@ export class TodosService {
   findOneByTodoistID(id: string) {
     return this.todoModel.findOne({ todoistID: id });
   }
-
-  // findOneByExternalId(id: string) {
-  //   return `This action returns a #${id} todo`;
-  // }
 
   update(id: string | Types.ObjectId, updateTodoInput: UpdateTodoInput) {
     return this.todoModel.updateOne({ _id: id }, updateTodoInput, {
@@ -52,9 +48,5 @@ export class TodosService {
       { status: TodoStatus.DONE },
       { new: true },
     );
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} todo`;
   }
 }

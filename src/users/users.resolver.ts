@@ -35,14 +35,21 @@ export class UsersResolver {
     return user;
   }
 
-  @Mutation(() => User)
+  @UseGuards(GraphqlJWTAuthGuard)
+  @Mutation(() => User, { nullable: true })
   updateUser(
     @Args('id', { type: () => ID }) id: string,
     @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @CurrentUser() user: User,
   ) {
+    if (String(user._id) !== id) {
+      return null;
+    }
+
     return this.usersService.update(id, updateUserInput);
   }
 
+  @UseGuards(GraphqlJWTAuthGuard)
   @ResolveField('todos', () => [Todo])
   async getTodos(@Parent() user: User) {
     return this.todosService.findAllByUser({ userId: user._id });

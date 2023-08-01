@@ -11,15 +11,8 @@ export class UsersService {
     @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {}
 
-  findAllUsersThatNeedToBySynced(seconds: number): User[] {
-    throw new Error('Method not implemented.');
-  }
   create(createUserInput: CreateUserInput) {
-    this.userModel.create(createUserInput);
-  }
-
-  findAll() {
-    throw new Error('Method not implemented.');
+    return this.userModel.create(createUserInput);
   }
 
   findAllWithTodoistAPIKey() {
@@ -40,9 +33,5 @@ export class UsersService {
       { $set: updateUserInput },
       { returnDocument: 'after', lean: true },
     );
-  }
-
-  remove(id: number) {
-    throw new Error('Method not implemented.');
   }
 }
