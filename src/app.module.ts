@@ -20,10 +20,13 @@ import { AuthModule } from './auth/auth.module';
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
+
       // I'd leave this on even in production. It makes debugging and testing
       // in production much easier and if security is a concern, well, hiding
       // the schema is not a good way to handle security.
       playground: true,
+      introspection: true,
+
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
