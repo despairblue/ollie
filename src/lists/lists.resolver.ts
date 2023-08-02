@@ -36,6 +36,6 @@ export class ListsResolver {
   @UseGuards(GraphqlJWTAuthGuard)
   @ResolveField(() => [Todo])
   async todos(@Parent() list: List) {
-    return this.todosService.findAllbyList(list._id)
+    return this.todosService.findAllbyList(list._id);
   }
 }

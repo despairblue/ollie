@@ -39,8 +39,8 @@ describe('ListsService', () => {
     }).compile();
 
     service = module.get<ListsService>(ListsService);
-    const model: Model<List> = module.get(getModelToken(List.name));
 
+    const model: Model<List> = module.get(getModelToken(List.name));
     await model.deleteMany({});
   });
 

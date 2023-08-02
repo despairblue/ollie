@@ -14,6 +14,8 @@ export class User {
   @Prop({ unique: true })
   username: string;
 
+  // In a production system we wouldn't store the password, but salt and hash
+  // it and store the hash.
   @Prop({ required: true })
   password: string;
 

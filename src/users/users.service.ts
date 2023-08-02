@@ -19,7 +19,7 @@ export class UsersService {
     return this.userModel.find({ todoistApiKey: { $ne: null } });
   }
 
-  findOneById(id: string) {
+  findOneById(id: string | ObjectId) {
     return this.userModel.findOne({ _id: id }, undefined, { lean: true });
   }
 
