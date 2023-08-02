@@ -3,7 +3,7 @@ import { Resolver, Args, Mutation } from '@nestjs/graphql';
 import { GraphqlLocalAuthGuard } from './graphql-local-auth.guard';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './current-user.decorator';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 @Resolver()
 export class AuthResolver {

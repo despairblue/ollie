@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, CronExpression, Timeout } from '@nestjs/schedule';
 
-import { TodosService } from 'src/todos/todos.service';
+import { TodosService } from '../todos/todos.service';
 import { TodoistApiService } from './todoist-api.service';
 
-import { TodoStatus } from 'src/todos/entities/todo.entity';
-import { UsersService } from 'src/users/users.service';
+import { TodoStatus } from '../todos/entities/todo.entity';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TodoistSyncService {
@@ -77,7 +77,7 @@ export class TodoistSyncService {
     console.log('unsyncedTodos', unsyncedTodos);
 
     for (const todo of unsyncedTodos) {
-      if (todo.todoistID) {
+      if (todo.todoistId) {
         // TODO: fix 429 Too Many Requests
         // * reduce numbers of Requests
         // * handle retries using a queue

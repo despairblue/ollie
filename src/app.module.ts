@@ -12,7 +12,10 @@ import { ListsModule } from './lists/lists.module';
 import { TodoistModule } from './todoist/todoist.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Configuration } from './configuration/configuration';
+import {
+  Configuration,
+  ConfigurationType,
+} from './configuration/configuration';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 
@@ -44,7 +47,9 @@ import { AuthModule } from './auth/auth.module';
     }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      useFactory: async (
+        configService: ConfigService<ConfigurationType, true>,
+      ) => ({
         uri: configService.get('MONGODB_URI', { infer: true }),
       }),
       inject: [ConfigService],

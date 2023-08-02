@@ -17,7 +17,6 @@ export class TodosService {
   }
 
   create(createTodoInput: CreateTodoDto): Promise<Todo> {
-    console.log(createTodoInput);
     return this.todoModel.create({
       ...createTodoInput,
       updatedAt: new Date(),
@@ -28,12 +27,16 @@ export class TodosService {
     return this.todoModel.find({ userId: options.userId });
   }
 
-  findOne(id: string) {
+  findAllbyList(id: string) {
+    return this.todoModel.find({ listId: id });
+  }
+
+  findOneById(id: string) {
     return this.todoModel.findOne({ _id: id });
   }
 
   findOneByTodoistID(id: string) {
-    return this.todoModel.findOne({ todoistID: id });
+    return this.todoModel.findOne({ todoistId: id });
   }
 
   update(id: string | Types.ObjectId, updateTodoInput: UpdateTodoInput) {
@@ -47,6 +50,20 @@ export class TodosService {
       { _id: id },
       { status: TodoStatus.DONE },
       { new: true },
+    );
+  }
+
+  addTodoToList(id: string, listId: string) {
+    return this.todoModel.findOneAndUpdate(
+      { _id: id },
+      {
+        listId: listId,
+        $currentDate: { updatedAt: true },
+      },
+      {
+        returnDocument: 'after',
+        lean: true,
+      },
     );
   }
 }

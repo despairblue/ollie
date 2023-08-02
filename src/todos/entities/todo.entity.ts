@@ -33,13 +33,16 @@ export class Todo {
     nullable: true,
   })
   @Prop({ required: false })
-  todoistID?: string;
+  todoistId?: string;
 
   @Prop({ required: true })
   updatedAt: Date;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, required: true })
   userId: ObjectId;
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  listId?: ObjectId;
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);

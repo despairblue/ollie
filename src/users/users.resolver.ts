@@ -14,14 +14,17 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { Todo } from '../todos/entities/todo.entity';
 import { TodosService } from '../todos/todos.service';
 import { UseGuards } from '@nestjs/common';
-import { GraphqlJWTAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
-import { CurrentUser } from 'src/auth/current-user.decorator';
+import { GraphqlJWTAuthGuard } from '../auth/graphql-jwt-auth.guard';
+import { CurrentUser } from '../auth/current-user.decorator';
+import { ListsService } from 'src/lists/lists.service';
+import { List } from 'src/lists/entities/list.entity';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(
     private readonly usersService: UsersService,
     private readonly todosService: TodosService,
+    private readonly listsService: ListsService,
   ) {}
 
   @Mutation(() => User)
@@ -50,8 +53,14 @@ export class UsersResolver {
   }
 
   @UseGuards(GraphqlJWTAuthGuard)
-  @ResolveField('todos', () => [Todo])
-  async getTodos(@Parent() user: User) {
+  @ResolveField(() => [Todo])
+  async todos(@Parent() user: User) {
     return this.todosService.findAllByUser({ userId: user._id });
+  }
+
+  @UseGuards(GraphqlJWTAuthGuard)
+  @ResolveField(() => [List])
+  async lists(@Parent() user: User) {
+    return this.listsService.findAllByUser(user._id);
   }
 }
